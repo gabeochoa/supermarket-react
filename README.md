@@ -1,22 +1,5 @@
-# Starter Kit for Vite, React, TypeScript, Tailwind and Node.js ESM
+template from: https://github.com/cpojer/vite-ts-react-tailwind-template
 
-_Minimal, sensible defaults, fast._
-
-Read [the blog post about this template](https://cpojer.net/posts/fastest-frontend-tooling-in-2022).
-
-## Technologies
-
-- [Vite](https://vitejs.dev/)
-- [React](https://reactjs.org/)
-- [TypeScript](https://www.typescriptlang.org)
-- [Tailwind](https://tailwindcss.com/)
-- [pnpm](https://pnpm.io/ja/) (_Optional_)
-
-![screenshot of `App.tsx`](./screenshot.png)
-
-## Setup
-
-- Press the "Use this template" on the top of this repository's GitHub page.
 - Run `pnpm install` (or `npm install` if you don't use `pnpm`).
 - `pnpm dev` for development.
 - Use `pnpm test` to run tests.
