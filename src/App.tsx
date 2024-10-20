@@ -1,12 +1,12 @@
 import {
   JSXElementConstructor,
-  Key,
   ReactElement,
   ReactNode,
   useContext,
 } from 'react';
 import DataProvider, { DataContext } from './DataContext.tsx';
 import type { Shelve } from './DataContext.tsx';
+import DataManager from './DataManager.tsx';
 import LeftCol from './LeftCol.tsx';
 import Tabs from './tabs.tsx';
 
@@ -104,6 +104,7 @@ function Shelves(_props: any) {
 export default function App() {
   return (
     <DataProvider>
+      <DataManager />
       <div className="container mx-auto flex h-full columns-auto flex-nowrap">
         <Column size="w-1/4">
           <LeftCol />

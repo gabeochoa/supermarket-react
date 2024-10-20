@@ -3,6 +3,7 @@ import {
   JSXElementConstructor,
   ReactElement,
   ReactNode,
+  useCallback,
   useState,
 } from 'react';
 
@@ -64,7 +65,7 @@ function removeAmount(
   item_id: number,
   amount: number,
 ) {
-  const existingItemIndex = list.findIndex((i) => i.id === item_id);
+  const existingItemIndex = list.findIndex((i) => i.item_id === item_id);
   if (existingItemIndex !== -1) {
     // If the item exists, merge the amounts
     list[existingItemIndex].amount -= amount;
@@ -104,10 +105,14 @@ export default function DataProvider(props: {
     | Iterable<ReactNode>
     | null;
 }) {
+  const [ticks, setTicks] = useState<number>(0);
+  const [prevEarnings, setPrevEarnings] = useState<Array<number>>([
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ]);
   const [money, setMoney] = useState<number>(0);
   const [inventory, setInventory] = useState<Array<InventoryItem>>([
     {
-      amount: 1,
+      amount: 100,
       item_id: 0,
     },
     {
@@ -133,9 +138,23 @@ export default function DataProvider(props: {
     },
   ]);
 
+  const saveEarning = useCallback(
+    (diff: number) => {
+      const newEarnings = [...prevEarnings];
+      newEarnings.shift();
+      newEarnings.push(diff);
+      setPrevEarnings(newEarnings);
+    },
+    [prevEarnings, setPrevEarnings],
+  );
+
   return (
     <DataContext.Provider
       value={{
+        ticks,
+        setTicks,
+        prevEarnings,
+        setPrevEarnings,
         ITEMS: Items,
         addItem: (arr, item) => {
           setInventory(addItem(arr, item));
@@ -145,7 +164,10 @@ export default function DataProvider(props: {
         removeAmount: (arr, item_id, amt) => {
           setInventory(removeAmount(arr, item_id, amt));
         },
-        setMoney,
+        setMoney: (amt) => {
+          saveEarning(amt - money);
+          setMoney(amt);
+        },
         setShelves,
         shelves,
         orders,
