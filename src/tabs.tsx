@@ -1,10 +1,17 @@
+import { useContext } from 'react';
+import { DataContext } from './DataContext.tsx';
+import type { Order } from './DataContext.tsx';
+
 enum TabType {
   IdeaTab,
   DealsTab,
 }
 
-function OrderCard(props) {
-  const wrapWithIndicator = (cmp) => {
+function OrderCard(props: Order) {
+  const { ITEMS } = useContext(DataContext);
+  const item_info = ITEMS[props.item_id];
+
+  const wrapWithIndicator = (cmp: any) => {
     return (
       <div className="indicator">
         <span className="badge-primaryindicator-top badge indicator-item">
@@ -15,7 +22,7 @@ function OrderCard(props) {
     );
   };
 
-  const wrapWithPadding = (cmp) => {
+  const wrapWithPadding = (cmp: any) => {
     return <div style={{ paddingBottom: 8 }}> {cmp} </div>;
   };
 
@@ -28,14 +35,22 @@ function OrderCard(props) {
   }
 
   const innerCard = (
-    <div className="card card-compact bg-base-100 shadow-xl">
-      <div className="card-body items-center text-center">
-        <p>100x for 12345$</p>
-        <progress
-          className={'progress ' + progressColor}
-          value={props.pctRemaining}
-          max="100"
-        />
+    <div style={{ width: 120 }}>
+      <div className="card card-compact bg-base-100 shadow-xl">
+        <div className="card-body items-center text-center">
+          <p>
+            {item_info.name}
+            {item_info.icon}
+          </p>
+          <p>
+            {props.amount} for {props.amount}$
+          </p>
+          <progress
+            className={'progress ' + progressColor}
+            value={props.pctRemaining}
+            max="100"
+          />
+        </div>
       </div>
     </div>
   );
@@ -48,7 +63,7 @@ function OrderCard(props) {
   return wrapWithPadding(card);
 }
 
-export default function Tabs(props) {
+export default function Tabs() {
   return (
     <div
       role="tablist"
@@ -81,16 +96,23 @@ export default function Tabs(props) {
   );
 }
 
-function TabContent(props) {
+function ActiveOrders() {
+  const { orders } = useContext(DataContext);
+
+  return (
+    <div style={{ padding: 20 }}>
+      {orders.map((order: Order) => {
+        return <OrderCard {...order} />;
+      })}
+    </div>
+  );
+}
+
+function TabContent(props: { active: TabType }) {
   switch (props.active) {
     case TabType.IdeaTab:
       return <div style={{ padding: 20 }}></div>;
     case TabType.DealsTab:
-      return (
-        <div style={{ padding: 20 }}>
-          <OrderCard indicate pctRemaining={10} />
-          <OrderCard pctRemaining={30} />
-        </div>
-      );
+      return <ActiveOrders />;
   }
 }

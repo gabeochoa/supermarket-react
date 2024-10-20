@@ -39,6 +39,14 @@ export type Shelve = {
   item_id: null | number;
 };
 
+export type Order = {
+  item_id: null | number;
+  amount: number;
+  price: number;
+  pctRemaining: number;
+  indicate: boolean;
+};
+
 function addItem(list: Array<InventoryItem>, item: InventoryItem) {
   const existingItemIndex = list.findIndex((i) => i.item_id === item.item_id);
   if (existingItemIndex !== -1) {
@@ -73,6 +81,7 @@ const defaultValue = {
   setMoney: (m: number) => {},
   setShelves: (m: Array<Shelve>) => {},
   shelves: Array<Shelve>,
+  orders: Array<Order>,
 };
 
 export const DataContext = createContext(defaultValue);
@@ -107,6 +116,22 @@ export default function DataProvider(props: {
     },
   ]);
   const [shelves, setShelves] = useState<Array<Shelve>>(makeDefaultShelves());
+  const [orders, setOrders] = useState<Array<Order>>([
+    {
+      item_id: 0,
+      amount: 12,
+      price: 12,
+      pctRemaining: 30,
+      indicate: true,
+    },
+    {
+      item_id: 1,
+      amount: 3,
+      price: 45,
+      pctRemaining: 10,
+      indicate: false,
+    },
+  ]);
 
   return (
     <DataContext.Provider
@@ -123,6 +148,8 @@ export default function DataProvider(props: {
         setMoney,
         setShelves,
         shelves,
+        orders,
+        setOrders,
       }}
     >
       {props.children}

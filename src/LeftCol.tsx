@@ -1,31 +1,31 @@
 import { useContext } from 'react';
 import { DataContext } from './DataContext.tsx';
 
-function PlayerStats(_props) {
+function PlayerStats() {
   const data = useContext(DataContext);
   return <div className="">Money {data.money}</div>;
 }
 
-function IconButton(props) {
+function IconButton(props: { icon: string }) {
   return <button className="btn btn-square btn-xs">{props.icon}</button>;
 }
 
-function ButtonUpIcon(_props) {
+function ButtonUpIcon() {
   return <IconButton icon={'🔼'} />;
 }
 
-function ButtonDownIcon(_props) {
+function ButtonDownIcon() {
   return <IconButton icon={'🔽'} />;
 }
 
-function InventoryItem(_props) {
+function InventoryItem(props: { amount: number; name: string; price: number }) {
   return (
     <tr>
-      <td>{_props.amount}</td>
-      <td>{_props.name}</td>
+      <td>{props.amount}</td>
+      <td>{props.name}</td>
       <td>
         <div className="join">
-          <p style={{ paddingRight: 12 }}>${_props.price}</p>
+          <p style={{ paddingRight: 12 }}>${props.price}</p>
           <ButtonUpIcon />
           <ButtonDownIcon />
         </div>
