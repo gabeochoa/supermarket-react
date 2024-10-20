@@ -2,8 +2,19 @@ import { useContext } from 'react';
 import { DataContext } from './DataContext.tsx';
 
 function PlayerStats() {
-  const data = useContext(DataContext);
-  return <div className="">Money {data.money}</div>;
+  const { money, prevEarnings } = useContext(DataContext);
+
+  const sum = prevEarnings.reduce(
+    (acc: number, curValue: number) => acc + curValue,
+    0,
+  );
+  const rate = sum / 10;
+
+  return (
+    <div className="">
+      Money ${money} (${rate}/s)
+    </div>
+  );
 }
 
 function IconButton(props: { icon: string }) {
