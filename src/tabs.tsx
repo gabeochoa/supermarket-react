@@ -98,11 +98,15 @@ export default function Tabs() {
 
 function ActiveOrders() {
   const { orders } = useContext(DataContext);
-
   return (
     <div style={{ padding: 20 }}>
       {orders.map((order: Order) => {
-        return <OrderCard {...order} />;
+        return (
+          <OrderCard
+            key={'' + order.item_id + order.amount + order.price}
+            {...order}
+          />
+        );
       })}
     </div>
   );
