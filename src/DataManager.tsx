@@ -18,7 +18,7 @@ function ordersPassTime(data: any) {
     // TODO right now this doesnt support ratios of <1
     // imagine we want to do 2 apples for 1$
     const ratio = 1 + Math.floor(Math.random() * 10);
-    const amt = Math.floor(Math.random() * 10);
+    const amt = 1 + Math.floor(Math.random() * 10);
 
     const randomIndex = Math.floor(Math.random() * inventory.length);
     const newOrder = {
