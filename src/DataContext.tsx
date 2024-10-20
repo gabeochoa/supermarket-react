@@ -1,4 +1,10 @@
-import { createContext, useState } from 'react';
+import {
+  createContext,
+  JSXElementConstructor,
+  ReactElement,
+  ReactNode,
+  useState,
+} from 'react';
 
 type Item = {
   icon: string;
@@ -27,14 +33,14 @@ type InventoryItem = {
   item_id: number;
 };
 
-type Shelve = {
+export type Shelve = {
   amount: number;
   id: number;
-  item: null | InventoryItem;
+  item_id: null | number;
 };
 
 function addItem(list: Array<InventoryItem>, item: InventoryItem) {
-  const existingItemIndex = list.findIndex((i) => i.id === item.id);
+  const existingItemIndex = list.findIndex((i) => i.item_id === item.item_id);
   if (existingItemIndex !== -1) {
     // If the item exists, merge the amounts
     list[existingItemIndex].amount += item.amount;
@@ -71,8 +77,8 @@ const defaultValue = {
 
 export const DataContext = createContext(defaultValue);
 
-function makeDefaultShelves() {
-  const arr = [];
+function makeDefaultShelves(): Array<Shelve> {
+  const arr: Array<Shelve> = [];
   for (let i = 0; i < 6 * 6; i++) {
     arr.push({
       amount: 17,
@@ -83,7 +89,12 @@ function makeDefaultShelves() {
   return arr;
 }
 
-export default function DataProvider(props) {
+export default function DataProvider(props: {
+  children:
+    | ReactElement<any, string | JSXElementConstructor<any>>
+    | Iterable<ReactNode>
+    | null;
+}) {
   const [money, setMoney] = useState<number>(0);
   const [inventory, setInventory] = useState<Array<InventoryItem>>([
     {

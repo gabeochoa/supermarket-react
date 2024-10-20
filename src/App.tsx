@@ -1,13 +1,23 @@
-import { useContext, useState } from 'react';
+import {
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  useContext,
+} from 'react';
 import DataProvider, { DataContext } from './DataContext.tsx';
+import type { Shelve } from './DataContext.tsx';
 import LeftCol from './LeftCol.tsx';
 import Tabs from './tabs.tsx';
 
-const Column = (props) => (
-  <div className={'' + props.size + ' h-1/2'}>{props.children} </div>
-);
+const Column = (props: {
+  size: string;
+  children:
+    | ReactElement<any, string | JSXElementConstructor<any>>
+    | Iterable<ReactNode>;
+}) => <div className={'' + props.size + ' h-1/2'}>{props.children} </div>;
 
-function Item(props) {
+function Item(props: { item_id: string | number | null; amount: number }) {
   const { ITEMS } = useContext(DataContext);
 
   const item_info = props.item_id == null ? null : ITEMS[props.item_id];
@@ -52,38 +62,38 @@ function Item(props) {
   );
 }
 
-function Shelves(props) {
+function Shelves(_props: any) {
   const { shelves } = useContext(DataContext);
 
   return (
     <div className={''}>
       <div className={'container mx-auto flex columns-5 flex-nowrap'}>
-        {shelves.slice(0, 6).map((shelve) => (
+        {shelves.slice(0, 6).map((shelve: Shelve) => (
           <Item {...shelve} />
         ))}
       </div>
       <div className={'container mx-auto flex columns-5 flex-nowrap'}>
-        {shelves.slice(6, 12).map((shelve) => (
+        {shelves.slice(6, 12).map((shelve: Shelve) => (
           <Item {...shelve} />
         ))}
       </div>
       <div className={'container mx-auto flex columns-5 flex-nowrap'}>
-        {shelves.slice(12, 18).map((shelve) => (
+        {shelves.slice(12, 18).map((shelve: Shelve) => (
           <Item {...shelve} />
         ))}
       </div>
       <div className={'container mx-auto flex columns-5 flex-nowrap'}>
-        {shelves.slice(18, 24).map((shelve) => (
+        {shelves.slice(18, 24).map((shelve: Shelve) => (
           <Item {...shelve} />
         ))}
       </div>
       <div className={'container mx-auto flex columns-5 flex-nowrap'}>
-        {shelves.slice(24, 30).map((shelve) => (
+        {shelves.slice(24, 30).map((shelve: Shelve) => (
           <Item {...shelve} />
         ))}
       </div>
       <div className={'container mx-auto flex columns-5 flex-nowrap'}>
-        {shelves.slice(30, 36).map((shelve) => (
+        {shelves.slice(30, 36).map((shelve: Shelve) => (
           <Item {...shelve} />
         ))}
       </div>

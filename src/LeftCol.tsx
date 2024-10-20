@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { DataContext } from './DataContext.tsx';
 
-function PlayerStats(props) {
+function PlayerStats(_props) {
   const data = useContext(DataContext);
   return <div className="">Money {data.money}</div>;
 }
@@ -10,22 +10,22 @@ function IconButton(props) {
   return <button className="btn btn-square btn-xs">{props.icon}</button>;
 }
 
-function ButtonUpIcon(props) {
+function ButtonUpIcon(_props) {
   return <IconButton icon={'🔼'} />;
 }
 
-function ButtonDownIcon(props) {
+function ButtonDownIcon(_props) {
   return <IconButton icon={'🔽'} />;
 }
 
-function InventoryItem(props) {
+function InventoryItem(_props) {
   return (
     <tr>
-      <td>{props.amount}</td>
-      <td>{props.name}</td>
+      <td>{_props.amount}</td>
+      <td>{_props.name}</td>
       <td>
         <div className="join">
-          <p style={{ paddingRight: 12 }}>${props.price}</p>
+          <p style={{ paddingRight: 12 }}>${_props.price}</p>
           <ButtonUpIcon />
           <ButtonDownIcon />
         </div>
@@ -34,7 +34,7 @@ function InventoryItem(props) {
   );
 }
 
-function Inventory(props) {
+function Inventory(_props: any) {
   const { inventory, ITEMS } = useContext(DataContext);
   return (
     <div className="overflow-x-auto">
@@ -48,7 +48,11 @@ function Inventory(props) {
         </thead>
         <tbody>
           {inventory.map((item) => (
-            <InventoryItem {...item} {...ITEMS[item.item_id]} />
+            <InventoryItem
+              key={item.item_id}
+              {...item}
+              {...ITEMS[item.item_id]}
+            />
           ))}
         </tbody>
       </table>
