@@ -1,10 +1,36 @@
 import { createContext, useState } from 'react';
 
-type InventoryItem = {
-  amount: number;
+type Item = {
+  icon: string;
   id: number;
   name: string;
   price: number;
+};
+
+const Items: Array<Item> = [
+  {
+    icon: '🍎',
+    id: 0,
+    name: 'apple',
+    price: 1,
+  },
+  {
+    icon: '🥔',
+    id: 0,
+    name: 'potato',
+    price: 1,
+  },
+];
+
+type InventoryItem = {
+  amount: number;
+  item_id: number;
+};
+
+type Shelve = {
+  amount: number;
+  id: number;
+  item: null | InventoryItem;
 };
 
 function addItem(list: Array<InventoryItem>, item: InventoryItem) {
@@ -33,35 +59,48 @@ function removeAmount(
 }
 
 const defaultValue = {
+  ITEMS: Array<Item>,
   addItem: (m: Array<InventoryItem>, i: InventoryItem) => {},
   inventory: Array<InventoryItem>(),
   money: 0,
   removeAmount: (m: Array<InventoryItem>, i: number, amt: number) => {},
   setMoney: (m: number) => {},
+  setShelves: (m: Array<Shelve>) => {},
+  shelves: Array<Shelve>,
 };
 
 export const DataContext = createContext(defaultValue);
+
+function makeDefaultShelves() {
+  const arr = [];
+  for (let i = 0; i < 6 * 6; i++) {
+    arr.push({
+      amount: 17,
+      id: i,
+      item_id: 0,
+    });
+  }
+  return arr;
+}
 
 export default function DataProvider(props) {
   const [money, setMoney] = useState<number>(0);
   const [inventory, setInventory] = useState<Array<InventoryItem>>([
     {
       amount: 1,
-      id: 0,
-      name: 'potato',
-      price: 1,
+      item_id: 0,
     },
     {
       amount: 1,
-      id: 0,
-      name: 'apple',
-      price: 1,
+      item_id: 1,
     },
   ]);
+  const [shelves, setShelves] = useState<Array<Shelve>>(makeDefaultShelves());
 
   return (
     <DataContext.Provider
       value={{
+        ITEMS: Items,
         addItem: (arr, item) => {
           setInventory(addItem(arr, item));
         },
@@ -71,6 +110,8 @@ export default function DataProvider(props) {
           setInventory(removeAmount(arr, item_id, amt));
         },
         setMoney,
+        setShelves,
+        shelves,
       }}
     >
       {props.children}

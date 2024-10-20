@@ -6,25 +6,12 @@ function PlayerStats(props) {
   return <div className="">Money {data.money}</div>;
 }
 
-function ButtonXIcon(props) {
-  return (
-    <button className="btn btn-square btn-xs">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M6 18L18 6M6 6l12 12"
-        />
-      </svg>
-    </button>
-  );
+function ButtonUpIcon(props) {
+  return <button className="btn btn-square btn-xs">🔼</button>;
+}
+
+function ButtonDownIcon(props) {
+  return <button className="btn btn-square btn-xs">🔽</button>;
 }
 
 function InventoryItem(props) {
@@ -34,8 +21,8 @@ function InventoryItem(props) {
         <div className="join">
           <p>{props.name}</p>
           <p>${props.price}</p>
-          <ButtonXIcon />
-          <ButtonXIcon />
+          <ButtonUpIcon />
+          <ButtonDownIcon />
         </div>
       </div>
     </div>
@@ -43,11 +30,11 @@ function InventoryItem(props) {
 }
 
 function Inventory(props) {
-  const data = useContext(DataContext);
+  const { inventory, ITEMS } = useContext(DataContext);
   return (
     <div className="">
-      {data.inventory.map((item) => (
-        <InventoryItem {...item} />
+      {inventory.map((item) => (
+        <InventoryItem {...item} {...ITEMS[item.item_id]} />
       ))}
     </div>
   );
