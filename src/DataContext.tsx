@@ -91,7 +91,7 @@ export default function DataProvider(props) {
       item_id: 0,
     },
     {
-      amount: 1,
+      amount: 0,
       item_id: 1,
     },
   ]);

@@ -19,6 +19,7 @@ function InventoryItem(props) {
     <div className="card card-compact" key={props.id}>
       <div className="card-body">
         <div className="join">
+          <p>{props.amount}</p>
           <p>{props.name}</p>
           <p>${props.price}</p>
           <ButtonUpIcon />
