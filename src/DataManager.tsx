@@ -3,7 +3,7 @@ import { DataContext } from './DataContext.tsx';
 import type { Order } from './DataContext.tsx';
 
 function ordersPassTime(data: any) {
-  const { orders, setOrders } = data;
+  const { orders, setOrders, inventory } = data;
 
   const updatedOrders = orders
     .map((order: Order) => {
@@ -13,6 +13,24 @@ function ordersPassTime(data: any) {
       };
     })
     .filter((order: Order) => order.pctRemaining > 0);
+
+  if (updatedOrders.length < 5) {
+    // TODO right now this doesnt support ratios of <1
+    // imagine we want to do 2 apples for 1$
+    const ratio = 1 + Math.floor(Math.random() * 10);
+    const amt = Math.floor(Math.random() * 10);
+
+    const randomIndex = Math.floor(Math.random() * inventory.length);
+    const newOrder = {
+      item_id: inventory[randomIndex].item_id,
+      amount: amt,
+      price: amt * ratio,
+      pctRemaining: 100,
+      indicate: false,
+    };
+    updatedOrders.push(newOrder);
+  }
+
   setOrders(updatedOrders);
 }
 

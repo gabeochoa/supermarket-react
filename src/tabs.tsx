@@ -43,7 +43,10 @@ function OrderCard(props: Order) {
             {item_info.icon}
           </p>
           <p>
-            {props.amount} for {props.amount}$
+            {props.amount} for {props.price}$
+          </p>
+          <p>
+            (${props.price / props.amount}/ {item_info.icon})
           </p>
           <progress
             className={'progress ' + progressColor}
@@ -87,7 +90,7 @@ export default function Tabs() {
         className="tab"
         role="tab"
         defaultChecked
-        aria-label="Deals"
+        aria-label="Orders"
       />
       <div role="tabpanel" className="tab-content p-10">
         <TabContent active={TabType.DealsTab} />
