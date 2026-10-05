@@ -13,5 +13,6 @@ test('past mistake 1026b1a: price is amount*ratio, not amount', () => {
 test('topUp keeps >=5 valid orders and does not mutate input', () => {
   const input = [makeOrder([0], () => 0)];
   const out = topUpOrders(input, [0, 1], () => 0.2);
-  expect(out.length).toBe(5); expect(input.length).toBe(1);
+  expect(out.length).toBe(5);
+  expect(input.length).toBe(1);
 });

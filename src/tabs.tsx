@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { useContext } from 'react';
 import { DataContext, itemById } from './DataContext.tsx';
 import type { Order } from './DataContext.tsx';
@@ -11,7 +12,7 @@ function OrderCard(props: Order) {
   const { ITEMS } = useContext(DataContext);
   const item_info = itemById(ITEMS, props.item_id);
 
-  const wrapWithIndicator = (cmp: any) => {
+  const wrapWithIndicator = (cmp: ReactNode) => {
     return (
       <div className="indicator">
         <span className="badge-primaryindicator-top badge indicator-item">
@@ -22,7 +23,7 @@ function OrderCard(props: Order) {
     );
   };
 
-  const wrapWithPadding = (cmp: any) => {
+  const wrapWithPadding = (cmp: ReactNode) => {
     return <div style={{ paddingBottom: 8 }}> {cmp} </div>;
   };
 
@@ -50,8 +51,8 @@ function OrderCard(props: Order) {
           </p>
           <progress
             className={'progress ' + progressColor}
-            value={props.pctRemaining}
             max="100"
+            value={props.pctRemaining}
           />
         </div>
       </div>
@@ -69,30 +70,30 @@ function OrderCard(props: Order) {
 export default function Tabs() {
   return (
     <div
-      role="tablist"
       className="tabs tabs-lifted"
+      role="tablist"
       style={{ marginBottom: 20, marginLeft: 10 }}
     >
       <input
-        type="radio"
-        name="tabs_rc"
-        className="tab"
-        role="tab"
         aria-label="Ideas"
+        className="tab"
+        name="tabs_rc"
+        role="tab"
+        type="radio"
       />
-      <div role="tabpanel" className="tab-content p-10">
+      <div className="tab-content p-10" role="tabpanel">
         <TabContent active={TabType.IdeaTab} />
       </div>
 
       <input
-        type="radio"
-        name="tabs_rc"
-        className="tab"
-        role="tab"
-        defaultChecked
         aria-label="Orders"
+        className="tab"
+        defaultChecked
+        name="tabs_rc"
+        role="tab"
+        type="radio"
       />
-      <div role="tabpanel" className="tab-content p-10">
+      <div className="tab-content p-10" role="tabpanel">
         <TabContent active={TabType.DealsTab} />
       </div>
     </div>

@@ -1,11 +1,4 @@
-import {
-  createContext,
-  JSXElementConstructor,
-  ReactElement,
-  ReactNode,
-  useCallback,
-  useState,
-} from 'react';
+import { createContext, ReactNode, useCallback, useState } from 'react';
 
 type Item = {
   icon: string;
@@ -41,22 +34,29 @@ export type Shelve = {
 };
 
 export type Order = {
-  item_id: null | number;
   amount: number;
-  price: number;
-  pctRemaining: number;
   indicate: boolean;
+  item_id: null | number;
+  pctRemaining: number;
+  price: number;
 };
 
 // CORRECT rule: never mutate a state array in place — React sees the same
 // reference and skips the render. Always return a new array (see CORRECT.md).
-export function itemById(items: Array<Item>, id: number | null | undefined): Item | undefined {
+export function itemById(
+  items: Array<Item>,
+  id: number | null | undefined,
+): Item | undefined {
   return id == null ? undefined : items.find((i) => i.id === id);
 }
 function addItem(list: Array<InventoryItem>, item: InventoryItem) {
   const idx = list.findIndex((i) => i.item_id === item.item_id);
-  if (idx === -1) return [...list, item];
-  return list.map((i, j) => (j === idx ? { ...i, amount: i.amount + item.amount } : i));
+  if (idx === -1) {
+    return [...list, item];
+  }
+  return list.map((i, j) =>
+    j === idx ? { ...i, amount: i.amount + item.amount } : i,
+  );
 }
 
 function removeAmount(
@@ -64,22 +64,47 @@ function removeAmount(
   item_id: number,
   amount: number,
 ) {
-  return list.map((i) => (i.item_id === item_id ? { ...i, amount: Math.max(0, i.amount - amount) } : i));
+  return list.map((i) =>
+    i.item_id === item_id
+      ? { ...i, amount: Math.max(0, i.amount - amount) }
+      : i,
+  );
 }
 
-const defaultValue = {
-  ITEMS: Array<Item>,
-  addItem: (m: Array<InventoryItem>, i: InventoryItem) => {},
-  inventory: Array<InventoryItem>(),
+export type DataContextType = {
+  ITEMS: Array<Item>;
+  addItem: (m: Array<InventoryItem>, i: InventoryItem) => void;
+  inventory: Array<InventoryItem>;
+  money: number;
+  orders: Array<Order>;
+  prevEarnings: Array<number>;
+  removeAmount: (m: Array<InventoryItem>, i: number, amt: number) => void;
+  setMoney: (m: number) => void;
+  setOrders: (m: Array<Order>) => void;
+  setPrevEarnings: (m: Array<number>) => void;
+  setShelves: (m: Array<Shelve>) => void;
+  setTicks: (m: number) => void;
+  shelves: Array<Shelve>;
+  ticks: number;
+};
+const defaultValue: DataContextType = {
+  ITEMS: Items,
+  addItem: () => {},
+  inventory: [],
   money: 0,
-  removeAmount: (m: Array<InventoryItem>, i: number, amt: number) => {},
-  setMoney: (m: number) => {},
-  setShelves: (m: Array<Shelve>) => {},
-  shelves: Array<Shelve>,
-  orders: Array<Order>,
+  orders: [],
+  prevEarnings: [],
+  removeAmount: () => {},
+  setMoney: () => {},
+  setOrders: () => {},
+  setPrevEarnings: () => {},
+  setShelves: () => {},
+  setTicks: () => {},
+  shelves: [],
+  ticks: 0,
 };
 
-export const DataContext = createContext(defaultValue);
+export const DataContext = createContext<DataContextType>(defaultValue);
 
 function makeDefaultShelves(): Array<Shelve> {
   const arr: Array<Shelve> = [];
@@ -93,12 +118,7 @@ function makeDefaultShelves(): Array<Shelve> {
   return arr;
 }
 
-export default function DataProvider(props: {
-  children:
-    | ReactElement<any, string | JSXElementConstructor<any>>
-    | Iterable<ReactNode>
-    | null;
-}) {
+export default function DataProvider(props: { children: ReactNode }) {
   const [ticks, setTicks] = useState<number>(0);
   const [prevEarnings, setPrevEarnings] = useState<Array<number>>([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -117,18 +137,18 @@ export default function DataProvider(props: {
   const [shelves, setShelves] = useState<Array<Shelve>>(makeDefaultShelves());
   const [orders, setOrders] = useState<Array<Order>>([
     {
-      item_id: 0,
       amount: 12,
-      price: 12,
-      pctRemaining: 30,
       indicate: true,
+      item_id: 0,
+      pctRemaining: 30,
+      price: 12,
     },
     {
-      item_id: 1,
       amount: 3,
-      price: 45,
-      pctRemaining: 10,
       indicate: false,
+      item_id: 1,
+      pctRemaining: 10,
+      price: 45,
     },
   ]);
 
@@ -145,16 +165,14 @@ export default function DataProvider(props: {
   return (
     <DataContext.Provider
       value={{
-        ticks,
-        setTicks,
-        prevEarnings,
-        setPrevEarnings,
         ITEMS: Items,
         addItem: (arr, item) => {
           setInventory(addItem(arr, item));
         },
         inventory,
         money,
+        orders,
+        prevEarnings,
         removeAmount: (arr, item_id, amt) => {
           setInventory(removeAmount(arr, item_id, amt));
         },
@@ -162,10 +180,12 @@ export default function DataProvider(props: {
           saveEarning(amt - money);
           setMoney(amt);
         },
-        setShelves,
-        shelves,
-        orders,
         setOrders,
+        setPrevEarnings,
+        setShelves,
+        setTicks,
+        shelves,
+        ticks,
       }}
     >
       {props.children}

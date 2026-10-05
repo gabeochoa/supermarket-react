@@ -45,8 +45,8 @@ function InventoryItem(props: { amount: number; name: string; price: number }) {
   );
 }
 
-function Inventory(_props: any) {
-  const { inventory, ITEMS } = useContext(DataContext);
+function Inventory() {
+  const { ITEMS, inventory } = useContext(DataContext);
   return (
     <div className="overflow-x-auto">
       <table className="table table-zebra">

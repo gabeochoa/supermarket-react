@@ -1,10 +1,10 @@
 import { useContext, useEffect } from 'react';
 import { DataContext } from './DataContext.tsx';
-import type { Order } from './DataContext.tsx';
+import type { DataContextType, Order } from './DataContext.tsx';
 import { topUpOrders } from './orders.ts';
 
-function ordersPassTime(data: any) {
-  const { orders, setOrders, inventory } = data;
+function ordersPassTime(data: DataContextType) {
+  const { inventory, orders, setOrders } = data;
 
   const updatedOrders = orders
     .map((order: Order) => {
@@ -15,11 +15,14 @@ function ordersPassTime(data: any) {
     })
     .filter((order: Order) => order.pctRemaining > 0);
 
-  const topped = topUpOrders(updatedOrders, inventory.map((i: { item_id: number }) => i.item_id));
+  const topped = topUpOrders(
+    updatedOrders,
+    inventory.map((i: { item_id: number }) => i.item_id),
+  );
   setOrders(topped);
 }
 
-function onTick(data: any) {
+function onTick(data: DataContextType) {
   //   console.log('datamanager tick');
   data.setTicks(data.ticks + 1);
   //
@@ -31,7 +34,7 @@ function onTick(data: any) {
   ordersPassTime(data);
 }
 
-function onSecond(data: any) {
+function onSecond(data: DataContextType) {
   const { money, setMoney } = data;
 
   setMoney(money + 1);
@@ -50,7 +53,7 @@ function DataManager() {
     };
   }, [data]);
 
-  return;
+  return null;
 }
 
 export default DataManager;
