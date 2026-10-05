@@ -23,7 +23,7 @@ const Items: Array<Item> = [
   },
   {
     icon: '🥔',
-    id: 0,
+    id: 1,
     name: 'potato',
     price: 1,
   },
@@ -48,16 +48,15 @@ export type Order = {
   indicate: boolean;
 };
 
+// CORRECT rule: never mutate a state array in place — React sees the same
+// reference and skips the render. Always return a new array (see CORRECT.md).
+export function itemById(items: Array<Item>, id: number | null | undefined): Item | undefined {
+  return id == null ? undefined : items.find((i) => i.id === id);
+}
 function addItem(list: Array<InventoryItem>, item: InventoryItem) {
-  const existingItemIndex = list.findIndex((i) => i.item_id === item.item_id);
-  if (existingItemIndex !== -1) {
-    // If the item exists, merge the amounts
-    list[existingItemIndex].amount += item.amount;
-  } else {
-    // If the item does not exist, add it to the list
-    list.push(item);
-  }
-  return list;
+  const idx = list.findIndex((i) => i.item_id === item.item_id);
+  if (idx === -1) return [...list, item];
+  return list.map((i, j) => (j === idx ? { ...i, amount: i.amount + item.amount } : i));
 }
 
 function removeAmount(
@@ -65,12 +64,7 @@ function removeAmount(
   item_id: number,
   amount: number,
 ) {
-  const existingItemIndex = list.findIndex((i) => i.item_id === item_id);
-  if (existingItemIndex !== -1) {
-    // If the item exists, merge the amounts
-    list[existingItemIndex].amount -= amount;
-  }
-  return list;
+  return list.map((i) => (i.item_id === item_id ? { ...i, amount: Math.max(0, i.amount - amount) } : i));
 }
 
 const defaultValue = {

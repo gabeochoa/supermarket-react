@@ -4,7 +4,7 @@ import {
   ReactNode,
   useContext,
 } from 'react';
-import DataProvider, { DataContext } from './DataContext.tsx';
+import DataProvider, { DataContext, itemById } from './DataContext.tsx';
 import type { Shelve } from './DataContext.tsx';
 import DataManager from './DataManager.tsx';
 import LeftCol from './LeftCol.tsx';
@@ -20,7 +20,7 @@ const Column = (props: {
 function Item(props: { item_id: string | number | null; amount: number }) {
   const { ITEMS } = useContext(DataContext);
 
-  const item_info = props.item_id == null ? null : ITEMS[props.item_id];
+  const item_info = itemById(ITEMS, props.item_id);
 
   const icons = [];
   for (let i = 0; i < props.amount; i++) {

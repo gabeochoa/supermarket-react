@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { DataContext } from './DataContext.tsx';
+import { DataContext, itemById } from './DataContext.tsx';
 import type { Order } from './DataContext.tsx';
 
 enum TabType {
@@ -9,7 +9,7 @@ enum TabType {
 
 function OrderCard(props: Order) {
   const { ITEMS } = useContext(DataContext);
-  const item_info = ITEMS[props.item_id];
+  const item_info = itemById(ITEMS, props.item_id);
 
   const wrapWithIndicator = (cmp: any) => {
     return (
@@ -39,14 +39,14 @@ function OrderCard(props: Order) {
       <div className="card card-compact bg-base-100 shadow-xl">
         <div className="card-body items-center text-center">
           <p>
-            {item_info.name}
-            {item_info.icon}
+            {item_info?.name}
+            {item_info?.icon}
           </p>
           <p>
             {props.amount} for {props.price}$
           </p>
           <p>
-            (${props.price / props.amount}/ {item_info.icon})
+            (${props.price / props.amount}/ {item_info?.icon})
           </p>
           <progress
             className={'progress ' + progressColor}

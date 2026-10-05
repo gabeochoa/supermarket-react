@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { DataContext } from './DataContext.tsx';
+import { DataContext, itemById } from './DataContext.tsx';
 
 function PlayerStats() {
   const { money, prevEarnings } = useContext(DataContext);
@@ -62,7 +62,7 @@ function Inventory(_props: any) {
             <InventoryItem
               key={item.item_id}
               {...item}
-              {...ITEMS[item.item_id]}
+              {...(itemById(ITEMS, item.item_id) ?? { name: '?', price: 0 })}
             />
           ))}
         </tbody>
