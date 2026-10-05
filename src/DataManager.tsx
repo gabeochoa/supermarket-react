@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { DataContext } from './DataContext.tsx';
 import type { Order } from './DataContext.tsx';
+import { topUpOrders } from './orders.ts';
 
 function ordersPassTime(data: any) {
   const { orders, setOrders, inventory } = data;
@@ -14,24 +15,8 @@ function ordersPassTime(data: any) {
     })
     .filter((order: Order) => order.pctRemaining > 0);
 
-  if (updatedOrders.length < 5) {
-    // TODO right now this doesnt support ratios of <1
-    // imagine we want to do 2 apples for 1$
-    const ratio = 1 + Math.floor(Math.random() * 10);
-    const amt = 1 + Math.floor(Math.random() * 10);
-
-    const randomIndex = Math.floor(Math.random() * inventory.length);
-    const newOrder = {
-      item_id: inventory[randomIndex].item_id,
-      amount: amt,
-      price: amt * ratio,
-      pctRemaining: 100,
-      indicate: false,
-    };
-    updatedOrders.push(newOrder);
-  }
-
-  setOrders(updatedOrders);
+  const topped = topUpOrders(updatedOrders, inventory.map((i: { item_id: number }) => i.item_id));
+  setOrders(topped);
 }
 
 function onTick(data: any) {
